@@ -1,0 +1,15 @@
+(module
+ (type $none_=>_i32 (func (result i32)))
+ (global $~lib/memory/__data_end i32 (i32.const 92))
+ (global $~lib/memory/__stack_pointer (mut i32) (i32.const 16476))
+ (global $~lib/memory/__heap_base i32 (i32.const 16476))
+ (memory $0 1)
+ (data (i32.const 12) "L\00\00\00\00\00\00\00\00\00\00\00\01\00\00\006\00\00\00H\00e\00l\00l\00o\00 \00W\00o\00r\00l\00d\00 \00f\00r\00o\00m\00 \00T\00y\00p\00e\00s\00c\00r\00i\00p\00t\00\00\00\00\00\00\00")
+ (table $0 1 funcref)
+ (elem $0 (i32.const 1))
+ (export "helloWorld" (func $assembly/index/helloWorld))
+ (export "memory" (memory $0))
+ (func $assembly/index/helloWorld (result i32)
+  i32.const 32
+ )
+)

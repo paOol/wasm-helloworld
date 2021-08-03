@@ -1,22 +1,27 @@
-import { createServer } from 'http'
-import { parse } from 'url'
-import next from 'next'
+import next, { NextApiHandler } from 'next';
+import express, { Express, Request, Response } from 'express';
+import * as http from 'http';
 
-const port = parseInt(process.env.PORT || '3000', 10)
-const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
-const handle = app.getRequestHandler()
+import router from './routes';
 
-app.prepare().then(() => {
-  createServer((req, res) => {
-    const parsedUrl = parse(req.url!, true)
-    handle(req, res, parsedUrl)
-  }).listen(port)
+const port: number = parseInt(process.env.PORT || '3333', 10);
+const dev: boolean = process.env.NODE_ENV !== 'production';
+const nextApp = next({ dev });
+const nextHandler: NextApiHandler = nextApp.getRequestHandler();
 
-  // tslint:disable-next-line:no-console
-  console.log(
-    `> Server listening at http://localhost:${port} as ${
-      dev ? 'development' : process.env.NODE_ENV
-    }`
-  )
-})
+nextApp.prepare().then(async () => {
+  const app: Express = express();
+  const server: http.Server = http.createServer(app);
+
+  app.use(express.json());
+
+  app.get('/hello', async (_: Request, res: Response) => {
+    res.send('Hello World');
+  });
+  app.use('/', router);
+  app.all('*', (req: any, res: any) => nextHandler(req, res));
+
+  server.listen(port, () => {
+    console.log(`> Ready on http://localhost:${port}`);
+  });
+});
